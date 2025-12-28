@@ -1,0 +1,40 @@
+<!-- Defining the title variable over here to observe onChanges -->
+<!-- To know more about how onChanges works, check the console for more information -->
+<h2>{{ title }}</h2>
+
+<!-- Creating a table to display repeating data -->
+<table>
+    <thead>
+        <tr>
+            <!-- The different headings of the table -->
+            <th>Index no.</th>
+            <th>Room Type</th>
+            <th>Room Price</th>
+            <th>Check-in Date</th>
+            <th>Chances of getting room</th>
+            <th>Select the Room</th>
+        </tr>
+    </thead>
+    <!-- Similar to a for loop (earlier called ngFor), syntax resembles python for loop more -->
+    <!-- $index is to track the indexing of the for loop -->
+    <!-- Slice Pipe used as well, works just like the slice function in python and JS -->
+    <!-- | slice: 0:2 -->
+    @for (room of rooms; track $index) {
+        <tbody>
+            <tr>
+                <td>{{ $index }}</td>
+                <!-- Pipe(|) operator, used for data transformation to customise the way the data object is presented -->
+                <!-- Uppercase pipe (lowercase pipe has the same use, just converts chars into lowercase) -->
+                <td>{{ room.roomType | uppercase }}</td>
+                <!-- The right side of the : below allows you to specify the format you want to present the data in -->
+                <!-- For currency, you can use the code of the currency (refer to Documentation) -->
+                <td>{{ room.price | currency : 'INR' }}</td>
+                <!-- Date pipe, we can also customise the date and time format (refer to documentation) -->
+                <td>{{ room.checkinDate | date : 'dd MMM yyyy' }}</td>
+                <!-- Percent pipe, where 1 = 100% and so on -->
+                <td>{{ room.chances | percent }}</td>
+                <td><button (click)="roomSelect(room)">Select Room</button></td>
+            </tr>
+        </tbody>
+    }
+</table>

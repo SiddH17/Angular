@@ -1,0 +1,65 @@
+<!-- Example of interpolation type of binding syntax -->
+<h1>Welcome to {{sampleName}}!</h1>
+
+<app-header></app-header>
+
+<div [hidden]="hideRooms">
+    Number of Rooms: {{sampleNumber}}
+</div>
+<!-- Example of property binding syntax type, where we can use the attributes of tags -->
+<!-- Works similar to div innerText="example" -->
+<div [innerText]="sampleNumber"></div>
+
+<!-- Example of event binding syntax type, where we can use event handlers -->
+<!-- Similar to button onClick="function()" -->
+<button (click)="toggle()">Toggle</button>
+
+<!-- Null Coalescing Operator (??), where it works like an if condition if the variable mentioned is null -->
+<!-- If no value is mentioned for bookedRooms (we need to make the variable optional), 'No Rooms' will display -->
+{{rooms.bookedRooms ?? 'No Rooms'}}
+
+<!-- @if directive, newer version of *ngIf directive and works just like normal if conditions -->
+@if (rooms.availableRooms>10) {
+    <div>
+        The number of rooms: {{rooms.availableRooms}}
+    </div>
+}
+
+<!-- Calling the chid component over here -->
+<!-- Calling rooms here to display the list of rooms as the original class is present in the parent component -->
+<!-- selectedRoom basically is the function emitted by the child component and needs to be worked on in the parent compponent -->
+<app-room-list [rooms] = "roomList" (selectedRoom)="selectingRoom($event)" [title]="title"></app-room-list>
+<br>
+
+<div>
+    <!-- JsonPipe, displays the data in JSON format, preferably use it only for debugging purposes -->
+    {{ selectedRoom | json }}
+</div>
+
+<!-- ngSwitch, which is the same as switch-case statement -->
+@switch (switching) {
+    <!-- For different cases, similar to in switch-case statements -->
+    @case ("role") {
+        <p>This is what you will be seeing here!</p>
+    }
+    @case ("case") {
+        <p>Maybe you'll see some good ol' cases here instead.</p>
+    }
+    <!-- The default value in case none of the conditions are met -->
+    @default {
+        <p>Sorry bucko, there's nothing to see here.</p>
+    }
+}
+
+<!-- ngClass directive, is mainly useful for creating classes based on arrays, conditions, etc. -->
+<div [ngClass]="rooms.availableRooms > 0 ? 'even' : 'odd'">
+    Some random div element over here
+    <!-- ngStyle directive, similar to ngClass directive this is useful with arrays, conditions and so on -->
+    <div [ngStyle]="{'color': rooms.bookedRooms>5 ?'green':'red'}">
+        The colour of this div elements seems a bit weird....
+    </div>
+</div>
+
+<div>
+    <button (click)="addRoom()">Add Room</button>
+</div>
