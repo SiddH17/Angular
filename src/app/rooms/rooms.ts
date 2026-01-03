@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, DoCheck, ViewChild } from '@angular/core';
+import { AfterViewChecked, AfterViewInit, Component, DoCheck, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { RoomNumbers, RoomList } from './roomsCustom';
 import { NgClass, NgStyle, UpperCasePipe, PercentPipe, DatePipe, CurrencyPipe, JsonPipe, SlicePipe } from "@angular/common";
 import { RoomListComponent } from './room-list/room-list';
@@ -7,11 +7,12 @@ import { Head } from 'rxjs';
 
 @Component({
   selector: 'app-rooms',
+  standalone: true,
   imports: [NgClass, NgStyle, RoomListComponent, JsonPipe, Header],
   templateUrl: './rooms.html',
   styleUrl: './rooms.css',
 })
-export class Rooms implements DoCheck, AfterViewInit  {
+export class Rooms implements DoCheck, AfterViewInit, AfterViewChecked  {
   sampleName = 'Angular Practice 101';
   sampleNumber = 92;
   hideRooms = true;
@@ -25,7 +26,12 @@ export class Rooms implements DoCheck, AfterViewInit  {
     bookedRooms: 5
   };
 
+
   @ViewChild(Header, { static: true }) header!: Header;
+
+  //ViewChildren decorator is used when we need to access multiple instances of same type (Header in this case)
+  //ViewChildren is of type QueryList as we need to access multiple elements
+  @ViewChildren(Header) viewChildrenComponent!: QueryList<Header>;
 
   //Declaring variable to test onChanges lifecycle hook
   title = 'Room List';
@@ -61,6 +67,7 @@ export class Rooms implements DoCheck, AfterViewInit  {
     ]
   }
 
+  //Value that has been outputted by child class (room-list) and being declared here
   selectedRoom!: RoomList;
 
   //DoCheck() lifecycle hook is only called when any DoChanges() hook is uncontrolled
@@ -71,8 +78,18 @@ export class Rooms implements DoCheck, AfterViewInit  {
 
   //AfterViewInit() is used to access components that cannot be accessed
   //Destroyed components can only be access from here, unless static is true
-  ngAfterViewInit(): void {
-    console.log(this.header, "The header");   
+  ngAfterViewInit(): void {   
+    //Changes the title of the first instance of viewChildrenComponent queryList only
+    this.viewChildrenComponent.last.title = "Hello First title";
+    console.log(this.viewChildrenComponent);
+  }
+
+  //This lifecycle hook is triggered after the view is checked by Angular
+  //Preferably used in dev mode as the content is checked twice in the DOM and an error is returned
+  //However, this is only in dev mode and if it's in production mode, there is an actual issue
+  ngAfterViewChecked(): void {
+    // console.log(this.header, "The header");
+    // this.header.title = 'Hello view checked';
   }
 
   toggle() {

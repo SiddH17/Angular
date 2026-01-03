@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal, AfterViewInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { Rooms } from "./rooms/rooms";
 
@@ -17,6 +17,15 @@ import { Rooms } from "./rooms/rooms";
   //Your default CSS template
   styleUrl: './app.css'
 })
-export class App {
+export class App implements AfterViewInit  {
   protected readonly title = signal('testangularapp');
+
+  //ViewChild here is used to read the component class of Rooms
+  //ViewContainerRef can attach one or more views to a component
+  @ViewChild('user', { read: ViewContainerRef }) vcr!: ViewContainerRef;
+  ngAfterViewInit(): void {
+    //Variable creates a new component of Rooms via createComponent() function
+    const componentRef = this.vcr.createComponent(Rooms);
+    componentRef.instance.sampleNumber = 19;
+  }
 }

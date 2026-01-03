@@ -1,6 +1,9 @@
 <!-- Example of interpolation type of binding syntax -->
 <h1>Welcome to {{sampleName}}!</h1>
 
+<!-- Declared multiple instances of the same component, check room.ts to see how it's handled -->
+<app-header></app-header>
+<app-header></app-header>
 <app-header></app-header>
 
 <div [hidden]="hideRooms">
