@@ -5,3 +5,11 @@
 
 <!-- Accessing a component dynamically using View init (Go to app.ts for the implementation) -->
 <ng-template #user></ng-template>
+
+<!-- Accessing content-container component here, and using ng-content to add custom HTML tags -->
+<app-content-container>
+    <!-- Everything loaded inside this container is the content -->
+    <app-rooms></app-rooms>
+    <h1>Welcome to ng-content</h1>
+    <app-header></app-header>
+</app-content-container>

@@ -80,8 +80,8 @@ export class Rooms implements DoCheck, AfterViewInit, AfterViewChecked  {
   //Destroyed components can only be access from here, unless static is true
   ngAfterViewInit(): void {   
     //Changes the title of the first instance of viewChildrenComponent queryList only
-    this.viewChildrenComponent.last.title = "Hello First title";
-    console.log(this.viewChildrenComponent);
+    this.viewChildrenComponent.first.title = "Hello First title";
+    console.log(this.viewChildrenComponent.first.title);
   }
 
   //This lifecycle hook is triggered after the view is checked by Angular

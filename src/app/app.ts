@@ -1,6 +1,8 @@
 import { Component, signal, AfterViewInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { Rooms } from "./rooms/rooms";
+import { ContentContainer } from './content-container/content-container';
+import { Header } from './header/header';
 
 //Decorator, used to modify/enhance the behaviour of the class
 @Component({
@@ -9,7 +11,7 @@ import { Rooms } from "./rooms/rooms";
   //Once you change the prefix there, you will have to change it everywhere in the app
   selector: 'app-root',
   //Includes the classes to be imported (Implemented)
-  imports: [RouterOutlet, Rooms],
+  imports: [RouterOutlet, Rooms, ContentContainer, Header],
   //Your default HTML/view template
   templateUrl: './app.html',
   //This is also a way of using templates
