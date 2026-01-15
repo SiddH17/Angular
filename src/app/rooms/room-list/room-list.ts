@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, Input, OnInit, Output, EventEmitter, OnChanges, SimpleChanges, OnDestroy } from '@angular/core';
 import { RoomList } from '../roomsCustom';
 import { NgClass, NgStyle, UpperCasePipe, PercentPipe, DatePipe, CurrencyPipe, JsonPipe, SlicePipe } from "@angular/common";
 
@@ -9,7 +9,7 @@ import { NgClass, NgStyle, UpperCasePipe, PercentPipe, DatePipe, CurrencyPipe, J
   templateUrl: './room-list.html',
   styleUrl: './room-list.css',
 })
-export class RoomListComponent implements OnInit, OnChanges {
+export class RoomListComponent implements OnInit, OnChanges, OnDestroy {
   
   //@input decorator helps the rooms variable become a valid HTML component
   @Input() rooms: RoomList[] = [];
@@ -38,5 +38,10 @@ export class RoomListComponent implements OnInit, OnChanges {
   //Using the emit() function to send the selected room data to the parent class
   roomSelect(room: RoomList) {
     this.selectedRoom.emit(room);
+  }
+
+  //OnDestroy is used when we need to destroy a component to save memory and space
+  ngOnDestroy(): void {
+    console.log("On Destroy is called");
   }
 }

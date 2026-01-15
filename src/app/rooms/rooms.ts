@@ -4,6 +4,7 @@ import { NgClass, NgStyle, UpperCasePipe, PercentPipe, DatePipe, CurrencyPipe, J
 import { RoomListComponent } from './room-list/room-list';
 import { Header } from '../header/header';
 import { Head } from 'rxjs';
+import { RoomService } from '../../services/room-service';
 
 @Component({
   selector: 'app-rooms',
@@ -18,7 +19,12 @@ export class Rooms implements DoCheck, AfterViewInit, AfterViewChecked  {
   hideRooms = true;
   
   //Helps in intialising/creating the component
-  constructor() { }
+  //In the parameter, we specify the services that need dependency injection(DI), which is a design pattern to instantiate to use services
+  //We should NEVER let the template see these DIs, so we always make them private
+  constructor(private roomsList: RoomService) {
+    //Using this, we can fetch the list of rooms from the service
+    this.roomList = this.roomsList.fetchRoomList();
+  }
 
   //Implementing the interface mentioned in roomsCustom.ts file
   rooms: RoomNumbers = {
@@ -45,27 +51,10 @@ export class Rooms implements DoCheck, AfterViewInit, AfterViewChecked  {
   //Part of lifecycle hook, which is triggered when anything in a component meets the condition
   //ngOnInit is triggered after the component is created via the constructor
   ngOnInit(): void {
-    this.roomList = [
-      {
-        roomType: 'Deluxe',
-        price: 700,
-        checkinDate: new Date('2001-07-21'),
-        chances: 0.33
-      },
-      {
-        roomType: 'Super Deluxe',
-        price: 1000,
-        checkinDate: new Date('2021-09-09'),
-        chances: 0.25
-      },
-      {
-        roomType: 'Suite',
-        price: 2000,
-        checkinDate: new Date('2018-10-03'),
-        chances: 0.10
-      }
-    ]
   }
+
+  //This is a way of calling services, only to be used when there is no dependency on Angular
+  // listOfRooms = new RoomService();
 
   //Value that has been outputted by child class (room-list) and being declared here
   selectedRoom!: RoomList;
