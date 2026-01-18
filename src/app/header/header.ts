@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Self } from '@angular/core';
 import { RoomService } from '../../services/room-service';
 
 //We use 'providers' here if we want a separate instance of the service to handle it differently
@@ -15,6 +15,8 @@ export class Header {
   name!: string;
 
   //If just the RoomService service is instantiated here, the constructor() in the service will be called by default
-  constructor(private RoomsService: RoomService) {
+  //@Self() decorator is a part of the self resolution model, which tells Angular to look for the service only here
+  //To prevent from getting an error, define the name of the service in 'providedIn' attribute
+  constructor(@Self() private RoomsService: RoomService) {
   }
 }

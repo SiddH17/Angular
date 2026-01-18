@@ -1,4 +1,4 @@
-import { AfterViewChecked, AfterViewInit, Component, DoCheck, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import { AfterViewChecked, AfterViewInit, Component, DoCheck, QueryList, SkipSelf, ViewChild, ViewChildren } from '@angular/core';
 import { RoomNumbers, RoomList } from './roomsCustom';
 import { NgClass, NgStyle, UpperCasePipe, PercentPipe, DatePipe, CurrencyPipe, JsonPipe, SlicePipe } from "@angular/common";
 import { RoomListComponent } from './room-list/room-list';
@@ -21,9 +21,10 @@ export class Rooms implements DoCheck, AfterViewInit, AfterViewChecked  {
   //Helps in intialising/creating the component
   //In the parameter, we specify the services that need dependency injection(DI), which is a design pattern to instantiate to use services
   //We should NEVER let the template see these DIs, so we always make them private
-  constructor(private roomsList: RoomService) {
+  //We use skipself decorator here when we know that this instance will never use the service 
+  constructor(@SkipSelf() private roomsList: RoomService) {
     //Using this, we can fetch the list of rooms from the service
-    this.roomList = this.roomsList.fetchRoomList();
+    // this.roomList = this.roomsList.fetchRoomList();
   }
 
   //Implementing the interface mentioned in roomsCustom.ts file

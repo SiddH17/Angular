@@ -1,4 +1,4 @@
-import { Component, signal, AfterViewInit, ViewChild, ViewContainerRef } from '@angular/core';
+import { Component, signal, AfterViewInit, ViewChild, ViewContainerRef, Inject, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { Rooms } from "./rooms/rooms";
 import { ContentContainer } from './content-container/content-container';
@@ -19,8 +19,17 @@ import { Header } from './header/header';
   //Your default CSS template
   styleUrl: './app.css'
 })
-export class App implements AfterViewInit  {
+export class App implements AfterViewInit, OnInit  {
   protected readonly title = signal('testangularapp');
+
+  //Injecting the localStorageToken here with type any to avoid any errors and to be on the safe side
+  // constructor(@Inject(localStorageToken) private localStorageToken: any) {
+  // }
+
+  ngOnInit(): void {
+    //You can check this value 
+    // this.localStorageToken.setItem('name', 'This is a sample name');
+  }
 
   //ViewChild here is used to read the component class of Rooms
   //ViewContainerRef can attach one or more views to a component
