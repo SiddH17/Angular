@@ -57,4 +57,14 @@ export class RoomService {
 
     return this.http.request(request);
   }
+
+  //An example of a request API, which is more powerful as compared to GET API as we get to use more features and can do much more than GET API
+  getRequest() {
+    //Creating an object of an HTTP request to get photos from jsonplaceholder, a dummy REST API website
+    //'reportProgress' helps users to track the progress event of a particular content
+    const request = new HttpRequest('GET', `https://jsonplaceholder.typicode.com/photos`, { reportProgress: true });
+
+    //Returning the request from the function
+    return this.http.request(request);
+  }
 }

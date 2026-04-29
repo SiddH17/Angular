@@ -83,6 +83,9 @@ export class Rooms implements OnInit, DoCheck, AfterViewInit, AfterViewChecked  
   //totalBytes is used to display the totla number of bytes of data loaded
   totalBytes = 0;
 
+  //Adding variable 'contentBytes' for showing loading of data via request API
+  contentBytes = 0;
+
   //Part of lifecycle hook, which is triggered when anything in a component meets the condition
   //ngOnInit is triggered after the component is created via the constructor
   ngOnInit(): void {
@@ -90,6 +93,31 @@ export class Rooms implements OnInit, DoCheck, AfterViewInit, AfterViewChecked  
     //This means that the data keeps getting pulled 
     this.roomService.fetchRoomList().subscribe(rooms => {
       this.roomList = rooms;
+    });
+
+    //Implementing the request API created in room-service file
+    this.roomService.getRequest().subscribe((event) => {
+      //Creating a switch-case event to track the progress of content download
+      //This will be more useful for larger amounts of data
+      switch (event.type) {
+        case HttpEventType.Sent:
+          console.log("The request has been sent to the server");
+          break;
+        
+        case HttpEventType.ResponseHeader:
+          console.log("The server has received the request sent");
+          break;
+        
+        case HttpEventType.DownloadProgress:
+          //Tracking the bytes of data fetched from the API (Jsonplaceholder in this case)
+          this.contentBytes += event.loaded;
+          console.log("Downloading the content and tracking the same: ", this.contentBytes);
+          break;
+        
+        case HttpEventType.Response:
+          console.log("Response received successfully!");
+          break;
+        }
     });
 
     //Calling the observable 'stream' to print the stream of data entered
