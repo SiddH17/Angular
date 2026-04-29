@@ -96,7 +96,7 @@ export class Rooms implements OnInit, DoCheck, AfterViewInit, AfterViewChecked  
     this.stream.subscribe({
       next: (value) => console.log(value),
       complete: () => console.log('complete'),
-      error: (error) => console.log(error)
+      error: (error) => console.log(error)  
     });
     //Another way of writing the same stream of data as above
     this.stream.subscribe((data) => console.log(data));
