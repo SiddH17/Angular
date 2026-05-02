@@ -3,6 +3,7 @@ import { RoomList } from '../app/rooms/roomsCustom';
 import { environment } from '../environment/environment';
 import { HttpClient, HttpRequest } from '@angular/common/http';
 import { Rooms } from '../app/rooms/rooms';
+import { Observable, shareReplay } from 'rxjs';
 
 //'providedIn: root' basically means over here that this service is avaiable globally on the app
 //If this is not added, then the service does not get registered and thus no one will be able to access it
@@ -16,8 +17,17 @@ export class RoomService {
   //Adding the roomList variable here to provide an example of service usage
   roomList: RoomList[] = [
   ]
+
+  // getRooms$ property is initialised, where $ denotes stream of data
+  getRooms$: Observable<RoomList[]>;
   
   constructor(private http: HttpClient) {
+    //modifying the stream of data inside a function since we can't modify it after subscribing to it
+    this.getRooms$ = this.http.get<RoomList[]>('/api/rooms').pipe(
+      //shareReplay() is used to cache some of the recurring data
+      //1 here denotes that the last 1 record of data is to be returned
+      shareReplay(1)
+    );
   }
   
   //Function that will be used when instantiating the service, wherever and whenver required

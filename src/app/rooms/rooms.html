@@ -1,6 +1,9 @@
 <!-- Example of interpolation type of binding syntax -->
 <h1>Welcome to {{sampleName}}!</h1>
 
+<!-- In certain situations, we can also use an async pipe that will automatically handle the subscription of the data stream -->
+<!-- {{rooms$ | async | json}} -->
+
 <!-- Declared multiple instances of the same component, check room.ts to see how it's handled -->
 <app-header></app-header>
 <!-- <app-header></app-header>

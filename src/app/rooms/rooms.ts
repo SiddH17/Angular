@@ -1,9 +1,9 @@
-import { AfterViewChecked, AfterViewInit, Component, DoCheck, Inject, OnInit, Optional, QueryList, SkipSelf, ViewChild, ViewChildren } from '@angular/core';
+import { AfterViewChecked, AfterViewInit, Component, DoCheck, Inject, OnDestroy, OnInit, Optional, QueryList, SkipSelf, ViewChild, ViewChildren } from '@angular/core';
 import { RoomNumbers, RoomList } from './roomsCustom';
 import { NgClass, NgStyle, UpperCasePipe, PercentPipe, DatePipe, CurrencyPipe, JsonPipe, SlicePipe } from "@angular/common";
 import { RoomListComponent } from './room-list/room-list';
 import { Header } from '../header/header';
-import { Head, Observable } from 'rxjs';
+import { Head, Observable, Subscription } from 'rxjs';
 import { RoomService } from '../../services/room-service';
 import { APP_SERVICE_CONFIG } from '../AppConfig/appconfig.service';
 import { AppConfig } from '../AppConfig/appconfig.interface';
@@ -16,7 +16,7 @@ import { HttpClient, HttpEventType } from '@angular/common/http';
   templateUrl: './rooms.html',
   styleUrl: './rooms.css',
 })
-export class Rooms implements OnInit, DoCheck, AfterViewInit, AfterViewChecked  {
+export class Rooms implements OnInit, DoCheck, AfterViewInit, AfterViewChecked, OnDestroy  {
   sampleName = 'Angular Practice 101';
   sampleNumber = 92;
   hideRooms = true;
@@ -54,6 +54,9 @@ export class Rooms implements OnInit, DoCheck, AfterViewInit, AfterViewChecked  
     bookedRooms: 5
   };
 
+  //Creating an object 'subscription' having type Subscription to handle subscribing and unsubscribing of data
+  subscription!: Subscription;
+
   // Observable is a stream of continuous data, used by RxJs, that implements push architecture
   stream = new Observable(observer => {
     //next() function is to basically print the next stream of data
@@ -86,12 +89,20 @@ export class Rooms implements OnInit, DoCheck, AfterViewInit, AfterViewChecked  
   //Adding variable 'contentBytes' for showing loading of data via request API
   contentBytes = 0;
 
+  //We can also define a particular action within a property
+  // rooms$ = this.roomService.getRooms$;
+
   //Part of lifecycle hook, which is triggered when anything in a component meets the condition
   //ngOnInit is triggered after the component is created via the constructor
   ngOnInit(): void {
     //Subscribe is a push implementation from RxJS, where if we pull the data once, then a continuous stream of data is returned.
-    //This means that the data keeps getting pulled 
-    this.roomService.fetchRoomList().subscribe(rooms => {
+    //This means that the data keeps getting pulled
+    // this.roomService.fetchRoomList().subscribe(rooms => {
+    //   this.roomList = rooms;
+    // });
+    //An alternate way of fetching room list, via getRooms$ property which is modifying the stream of data
+    //Along with this, we are also assigning the 'subscription' object the room fetching subscribe
+    this.subscription = this.roomService.getRooms$.subscribe(rooms => {
       this.roomList = rooms;
     });
 
@@ -240,5 +251,13 @@ export class Rooms implements OnInit, DoCheck, AfterViewInit, AfterViewChecked  
     this.roomService.deleteRoom(2).subscribe((data) => {
       this.roomList = data;
     });
+  }
+
+  ngOnDestroy(): void {
+    //Good practice to unsubscribe to any subscribed data under subscription, to free memory
+    if (this.subscription) {
+      //Works the opposite to that of subscribe(), naturally
+      this.subscription.unsubscribe();
+      }
   }
 }
