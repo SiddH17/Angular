@@ -66,6 +66,10 @@
     </div>
 </div>
 
+<h1>
+    The count of rooms currently: {{ roomCount$ | async }}
+</h1>
+
 <div>
     <button (click)="addRoom()">Add Room</button>
     <button (click)="editRoom()">Edit Room</button>

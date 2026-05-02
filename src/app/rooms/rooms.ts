@@ -1,9 +1,9 @@
-import { AfterViewChecked, AfterViewInit, Component, DoCheck, Inject, OnDestroy, OnInit, Optional, QueryList, SkipSelf, ViewChild, ViewChildren } from '@angular/core';
+import { AfterViewChecked, AfterViewInit, Component, DoCheck, inject, Inject, OnDestroy, OnInit, Optional, QueryList, SkipSelf, ViewChild, ViewChildren } from '@angular/core';
 import { RoomNumbers, RoomList } from './roomsCustom';
-import { NgClass, NgStyle, UpperCasePipe, PercentPipe, DatePipe, CurrencyPipe, JsonPipe, SlicePipe } from "@angular/common";
+import { NgClass, NgStyle, UpperCasePipe, PercentPipe, DatePipe, CurrencyPipe, JsonPipe, SlicePipe, AsyncPipe } from "@angular/common";
 import { RoomListComponent } from './room-list/room-list';
 import { Header } from '../header/header';
-import { Head, Observable, Subscription } from 'rxjs';
+import { catchError, Head, map, Observable, of, Subject, Subscription } from 'rxjs';
 import { RoomService } from '../../services/room-service';
 import { APP_SERVICE_CONFIG } from '../AppConfig/appconfig.service';
 import { AppConfig } from '../AppConfig/appconfig.interface';
@@ -12,7 +12,7 @@ import { HttpClient, HttpEventType } from '@angular/common/http';
 @Component({
   selector: 'app-rooms',
   standalone: true,
-  imports: [NgClass, NgStyle, RoomListComponent, JsonPipe, Header],
+  imports: [NgClass, NgStyle, RoomListComponent, JsonPipe, Header, AsyncPipe],
   templateUrl: './rooms.html',
   styleUrl: './rooms.css',
 })
@@ -30,10 +30,21 @@ export class Rooms implements OnInit, DoCheck, AfterViewInit, AfterViewChecked, 
   //   // this.roomList = this.roomsList.fetchRoomList();
   // }
 
+  //Defining an error property to catch any and all errors within a particular section of code
+  error$ = new Subject<string>;
+
+  //Getting and then displaying the error message received from the Subject class
+  getErrors$ = this.error$.asObservable();
+
+  rooms$ !: Observable<RoomList[]>;
+
+  //Using roomCount$ to use it in map operator, which accesses the service even without subbing to it
+  roomCount$ !: Observable<Number>;
+
   //One way to use value providers as dependency injection is via Inject Token
   //Refer to AppConfig folder for the service created, as Angular does not support value providers the same way it provides class-based providers
   constructor(@Inject(APP_SERVICE_CONFIG) private config: AppConfig, @SkipSelf() private roomService: RoomService) {
-    console.log(this.config.apiEndpoint)
+    console.log(this.config.apiEndpoint);
   }
 
   //We use the Optional() decorator (resolution modifier type) when, if the service is present then execute otherwise ignore if not present
@@ -66,7 +77,7 @@ export class Rooms implements OnInit, DoCheck, AfterViewInit, AfterViewChecked, 
     observer.complete();
     //error() function is used for error/exception handling
     // observer.error('error');
-  })
+  });
 
   @ViewChild(Header, { static: true }) header!: Header;
 
@@ -128,14 +139,14 @@ export class Rooms implements OnInit, DoCheck, AfterViewInit, AfterViewChecked, 
         case HttpEventType.Response:
           console.log("Response received successfully!");
           break;
-        }
+      }
     });
 
     //Calling the observable 'stream' to print the stream of data entered
     this.stream.subscribe({
       next: (value) => console.log(value),
       complete: () => console.log('complete'),
-      error: (error) => console.log(error)  
+      error: (error) => console.log(error)
     });
     //Another way of writing the same stream of data as above
     this.stream.subscribe((data) => console.log(data));
@@ -166,6 +177,22 @@ export class Rooms implements OnInit, DoCheck, AfterViewInit, AfterViewChecked, 
           console.log(event.body);
       }
     });
+
+    //Works similar to the try-catch block in other programming languages
+    //Avoid writing this in components due to change detection and rather write it in services instead
+    this.rooms$ = this.roomService.getRooms$.pipe(
+      //We use this function to catch the error and display the object/message
+      catchError((err) => {
+        //Displays the error messsage using the 'err' argument
+        this.error$.next(err.message);
+        //Returns the empty list (RoomList)
+        return of([]);
+      })
+    );
+
+    this.roomCount$ = this.roomService.getRooms$.pipe(
+      map((rooms) => rooms.length)
+    )
   }
 
   //This is a way of calling services, only to be used when there is no dependency on Angular
