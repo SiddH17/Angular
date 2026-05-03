@@ -1,5 +1,6 @@
 import { Component, Self } from '@angular/core';
 import { RoomService } from '../../services/room-service';
+import { RouterOutlet } from '@angular/router';
 
 //We use 'providers' here if we want a separate instance of the service to handle it differently
 @Component({
@@ -7,7 +8,9 @@ import { RoomService } from '../../services/room-service';
   imports: [],
   templateUrl: './header.html',
   styleUrl: './header.css',
-  providers: [RoomService]
+  providers: [RoomService, RouterOutlet],
+  //Writing this router-outlet template to enable routing in this component
+  template: `<router-outlet></router-outlet>`
 })
 export class Header {
   title!: string; 

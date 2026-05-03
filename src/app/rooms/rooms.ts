@@ -8,12 +8,15 @@ import { RoomService } from '../../services/room-service';
 import { APP_SERVICE_CONFIG } from '../AppConfig/appconfig.service';
 import { AppConfig } from '../AppConfig/appconfig.interface';
 import { HttpClient, HttpEventType } from '@angular/common/http';
+import { RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-rooms',
   standalone: true,
-  imports: [NgClass, NgStyle, RoomListComponent, JsonPipe, Header, AsyncPipe],
+  imports: [NgClass, NgStyle, RoomListComponent, JsonPipe, Header, AsyncPipe, RouterOutlet],
   templateUrl: './rooms.html',
+  //Enabling routing with this template
+  template: `<router-outlet></router-outlet>`,
   styleUrl: './rooms.css',
 })
 export class Rooms implements OnInit, DoCheck, AfterViewInit, AfterViewChecked, OnDestroy  {

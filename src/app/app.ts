@@ -1,5 +1,5 @@
 import { Component, signal, AfterViewInit, ViewChild, ViewContainerRef, Inject, OnInit } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { RouterOutlet, RouterLinkWithHref, RouterLink } from '@angular/router';
 import { Rooms } from "./rooms/rooms";
 import { ContentContainer } from './content-container/content-container';
 import { Header } from './header/header';
@@ -12,8 +12,9 @@ import { InitService } from './init/init-service';
   //The 'app' prefix can be changed in angular.json
   //Once you change the prefix there, you will have to change it everywhere in the app
   selector: 'app-root',
+  standalone: true,
   //Includes the classes to be imported (Implemented)
-  imports: [RouterOutlet, Rooms, ContentContainer, Header],
+  imports: [RouterOutlet, Rooms, ContentContainer, Header, RouterLinkWithHref, RouterLink],
   //Your default HTML/view template
   templateUrl: './app.html',
   //This is also a way of using templates

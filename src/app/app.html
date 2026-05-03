@@ -12,3 +12,13 @@
     <h1>Welcome to ng-content</h1>
     <app-header></app-header>
 </app-content-container>
+
+<!-- Avoid using HTML routing (href) instead of Angular routing (RouterLink) as it is slower to load -->
+<!-- Routing will work via href but it's slower than RouteLink -->
+<!-- <a [href]="'rooms'">Rooms</a>
+<a [href]="'header'">Header</a> -->
+<a [routerLink]="'rooms'">Rooms</a>
+<a [routerLink]="'header'">Header</a>
+
+<!-- We need to use this router outlet tag so that the routes mentioned within the page are accessible -->
+<router-outlet></router-outlet>
