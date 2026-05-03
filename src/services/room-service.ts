@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { RoomList } from '../app/rooms/roomsCustom';
 import { environment } from '../environment/environment';
-import { HttpClient, HttpRequest } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpRequest } from '@angular/common/http';
 import { Rooms } from '../app/rooms/rooms';
 import { Observable, shareReplay } from 'rxjs';
 
@@ -20,10 +20,14 @@ export class RoomService {
 
   // getRooms$ property is initialised, where $ denotes stream of data
   getRooms$: Observable<RoomList[]>;
+
+  //Creating a headers variable to modify the request headers that we see in the Network tab for each API call
+  headers = new HttpHeaders({ 'token': '23429hegeh23' });
   
   constructor(private http: HttpClient) {
     //modifying the stream of data inside a function since we can't modify it after subscribing to it
-    this.getRooms$ = this.http.get<RoomList[]>('/api/room').pipe(
+    //Additionally, we are also adding a key:value pair of showing the above-created headers variable in the API's request header
+    this.getRooms$ = this.http.get<RoomList[]>('/api/room', { headers: this.headers }).pipe(
       //shareReplay() is used to cache some of the recurring data
       //1 here denotes that the last 1 record of data is to be returned
       shareReplay(1)
@@ -42,7 +46,10 @@ export class RoomService {
   //Adding variable 'room' with datatype RoomList as we need to add another room
   addRoom(room: RoomList) {
     //Code used to demonstrate POST functionality using Angular's HTTP requests
-    return this.http.post<RoomList[]>('/api/rooms', room);
+    //Along with the getRooms$ property above, we are also modifying the request header of the addRoom API call to show the token
+    return this.http.post<RoomList[]>('/api/rooms', room, {
+      headers: this.headers
+    });
   }
 
   //Function to deal with updation of room details via PUT or PATCH (Using PUT in this case)

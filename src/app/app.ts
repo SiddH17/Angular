@@ -4,6 +4,7 @@ import { Rooms } from "./rooms/rooms";
 import { ContentContainer } from './content-container/content-container';
 import { Header } from './header/header';
 import { localStorageToken } from './localstorage.token';
+import { InitService } from './init/init-service';
 
 //Decorator, used to modify/enhance the behaviour of the class
 @Component({
@@ -24,7 +25,10 @@ export class App implements AfterViewInit, OnInit  {
   protected readonly title = signal('testangularapp');
 
   //Injecting the localStorageToken here with type any to avoid any errors and to be on the safe side
-  constructor(@Inject(localStorageToken) private localStorageToken: any) {
+  //Using InitService here so that it is initalised at the start of the app
+  constructor(@Inject(localStorageToken) private localStorageToken: any, private initService: InitService) {
+    //Logging the config variable to check the data passing through it
+    console.log(initService.config, "This is the initService config variable data");
   }
 
   ngOnInit(): void {
