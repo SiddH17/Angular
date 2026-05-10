@@ -5,6 +5,7 @@ import { ContentContainer } from './content-container/content-container';
 import { Header } from './header/header';
 import { localStorageToken } from './localstorage.token';
 import { InitService } from './init/init-service';
+import { AppNavComponent } from "./app-nav/app-nav.component";
 
 //Decorator, used to modify/enhance the behaviour of the class
 @Component({
@@ -14,7 +15,7 @@ import { InitService } from './init/init-service';
   selector: 'app-root',
   standalone: true,
   //Includes the classes to be imported (Implemented)
-  imports: [RouterOutlet, Rooms, ContentContainer, Header, RouterLinkWithHref, RouterLink],
+  imports: [RouterOutlet, AppNavComponent],
   //Your default HTML/view template
   templateUrl: './app.html',
   //This is also a way of using templates
@@ -42,7 +43,7 @@ export class App implements AfterViewInit, OnInit  {
   @ViewChild('user', { read: ViewContainerRef }) vcr!: ViewContainerRef;
   ngAfterViewInit(): void {
     //Variable creates a new component of Rooms via createComponent() function
-    const componentRef = this.vcr.createComponent(Rooms);
-    componentRef.instance.sampleNumber = 19;
+    // const componentRef = this.vcr.createComponent(Rooms);
+    // componentRef.instance.sampleNumber = 19;
   }
 }

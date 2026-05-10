@@ -16,7 +16,7 @@ import { RouterOutlet } from '@angular/router';
   imports: [NgClass, NgStyle, RoomListComponent, JsonPipe, Header, AsyncPipe, RouterOutlet],
   templateUrl: './rooms.html',
   //Enabling routing with this template
-  template: `<router-outlet></router-outlet>`,
+  // template: `<router-outlet></router-outlet>`,
   styleUrl: './rooms.css',
 })
 export class Rooms implements OnInit, DoCheck, AfterViewInit, AfterViewChecked, OnDestroy  {
@@ -46,7 +46,7 @@ export class Rooms implements OnInit, DoCheck, AfterViewInit, AfterViewChecked, 
 
   //One way to use value providers as dependency injection is via Inject Token
   //Refer to AppConfig folder for the service created, as Angular does not support value providers the same way it provides class-based providers
-  constructor(@Inject(APP_SERVICE_CONFIG) private config: AppConfig, @SkipSelf() private roomService: RoomService) {
+  constructor(@Inject(APP_SERVICE_CONFIG) private config: AppConfig, private roomService: RoomService) {
     console.log(this.config.apiEndpoint);
   }
 
@@ -256,6 +256,7 @@ export class Rooms implements OnInit, DoCheck, AfterViewInit, AfterViewChecked, 
 
     //Using RxJS observable and HTTP requests to add rooms via POST request
     this.roomService.addRoom(room).subscribe((data) => {
+      //We use the spread operator [...] to tell Angular to add the data on top of the array list
       this.roomList = data;
       console.log(this.roomList, "The data of the room being added");
     });
@@ -264,7 +265,7 @@ export class Rooms implements OnInit, DoCheck, AfterViewInit, AfterViewChecked, 
   //Function to update the room details (PUT,PATCH)
   editRoom() {
     const room: RoomList = {
-    roomNumber: 1,
+    roomNumber: 4,
     roomType: 'Deluxe Prime',
     price: 210,
     checkinDate: new Date('2023-10-29'),

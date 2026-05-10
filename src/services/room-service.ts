@@ -27,7 +27,7 @@ export class RoomService {
   constructor(private http: HttpClient) {
     //modifying the stream of data inside a function since we can't modify it after subscribing to it
     //Additionally, we are also adding a key:value pair of showing the above-created headers variable in the API's request header
-    this.getRooms$ = this.http.get<RoomList[]>('/api/room', { headers: this.headers }).pipe(
+    this.getRooms$ = this.http.get<RoomList[]>('/api/rooms', { headers: this.headers }).pipe(
       //shareReplay() is used to cache some of the recurring data
       //1 here denotes that the last 1 record of data is to be returned
       shareReplay(1)
