@@ -35,6 +35,9 @@
             <!-- Percent pipe, where 1 = 100% and so on -->
             <td>{{ room.chances | percent }}</td>
             <td><button (click)="roomSelect(room)">Select Room</button></td>
+            <td>
+                <button class="btn btn-primary" [routerLink]="['/rooms', room.roomNumber]">Book Room</button>
+            </td>
         </tr>
     }
 </table>

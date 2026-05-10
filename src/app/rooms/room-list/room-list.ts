@@ -1,10 +1,11 @@
 import { Component, Input, OnInit, Output, EventEmitter, OnChanges, SimpleChanges, OnDestroy } from '@angular/core';
 import { RoomList } from '../roomsCustom';
 import { NgClass, NgStyle, UpperCasePipe, PercentPipe, DatePipe, CurrencyPipe, JsonPipe, SlicePipe } from "@angular/common";
+import { RouterLink, RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-room-list',
-  imports: [UpperCasePipe, PercentPipe, DatePipe, CurrencyPipe, JsonPipe, SlicePipe],
+  imports: [UpperCasePipe, PercentPipe, DatePipe, CurrencyPipe, JsonPipe, SlicePipe, RouterOutlet, RouterLink],
   standalone: true,
   templateUrl: './room-list.html',
   styleUrl: './room-list.css',
